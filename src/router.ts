@@ -49,6 +49,20 @@ import {
   handlePublicDownloadAttachment,
 } from './handlers/attachments';
 
+function getNwIconSvg(): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="NW icon"><rect x="4" y="4" width="88" height="88" rx="20" fill="#111418"/><text x="48" y="60" text-anchor="middle" font-size="36" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-weight="800" letter-spacing="0.5" fill="#FFFFFF">NW</text></svg>`;
+}
+
+function handleNwFavicon(): Response {
+  return new Response(getNwIconSvg(), {
+    status: 200,
+    headers: {
+      'Content-Type': 'image/svg+xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=604800',
+    },
+  });
+}
+
 // Icons handler - proxy to Bitwarden's official icon service
 async function handleGetIcon(request: Request, env: Env, hostname: string): Promise<Response> {
   try {
@@ -105,9 +119,20 @@ export async function handleRequest(request: Request, env: Env): Promise<Respons
       return handleDisableSetup(request, env);
     }
 
-    // Favicon - return empty
-    if (path === '/favicon.ico') {
-      return new Response(null, { status: 204 });
+    // Browser/devtools probe endpoint
+    if (path === '/.well-known/appspecific/com.chrome.devtools.json' && method === 'GET') {
+      return new Response('{}', {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Cache-Control': 'no-store',
+        },
+      });
+    }
+
+    // Favicon
+    if ((path === '/favicon.ico' || path === '/favicon.svg') && method === 'GET') {
+      return handleNwFavicon();
     }
 
     // Icon endpoint - proxy to Bitwarden's icon service (no auth required)

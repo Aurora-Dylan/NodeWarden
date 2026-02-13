@@ -13,21 +13,18 @@ const registerPageHTML = `<!DOCTYPE html>
   <style>
     :root {
       color-scheme: light;
-      --bg0: #0b0b0f;
-      --bg1: #0f1020;
-      --card: rgba(255, 255, 255, 0.08);
-      --card2: rgba(255, 255, 255, 0.06);
-      --border: rgba(255, 255, 255, 0.14);
-      --text: rgba(255, 255, 255, 0.92);
-      --muted: rgba(255, 255, 255, 0.62);
-      --muted2: rgba(255, 255, 255, 0.52);
-      --accent: #0a84ff;
-      --accent2: #64d2ff;
-      --danger: #ff453a;
-      --ok: #32d74b;
-      --shadow: 0 16px 60px rgba(0, 0, 0, 0.50);
-      --radius: 18px;
-      --radius2: 14px;
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --border: #d0d5dd;
+      --text: #101828;
+      --muted: #475467;
+      --muted2: #667085;
+      --accent: #111418;
+      --danger: #b42318;
+      --ok: #027a48;
+      --shadow: 0 16px 44px rgba(16, 24, 40, 0.08);
+      --radius: 20px;
+      --radius2: 16px;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
     * { box-sizing: border-box; }
@@ -35,26 +32,20 @@ const registerPageHTML = `<!DOCTYPE html>
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background:
-        radial-gradient(900px 600px at 15% 10%, rgba(100, 210, 255, 0.25), transparent 60%),
-        radial-gradient(900px 600px at 85% 20%, rgba(10, 132, 255, 0.22), transparent 60%),
-        radial-gradient(900px 600px at 50% 90%, rgba(50, 215, 75, 0.10), transparent 60%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
+      background: var(--bg);
       color: var(--text);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 40px 24px;
     }
-    .shell { width: max(500px); }
+    .shell { width: min(920px, 100%); }
     .panel {
-      padding: 22px;
+      padding: 40px;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.06);
+      background: var(--card);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
     }
     .top {
       display: flex;
@@ -63,83 +54,85 @@ const registerPageHTML = `<!DOCTYPE html>
       margin-bottom: 14px;
     }
     .mark {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(10,132,255,0.85), rgba(100,210,255,0.55));
-      border: 1px solid rgba(255,255,255,0.20);
-      box-shadow: 0 10px 40px rgba(10, 132, 255, 0.30);
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background: #111418;
+      border: 1px solid #111418;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 24px;
       font-weight: 800;
-      letter-spacing: 1px;
-      color: rgba(255,255,255,0.96);
+      letter-spacing: 0.6px;
+      line-height: 1;
+      color: #ffffff;
       text-transform: uppercase;
       user-select: none;
     }
     .title { display: flex; flex-direction: column; gap: 4px; }
-    .title h1 { font-size: 22px; margin: 0; letter-spacing: -0.3px; }
-    .title p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .title h1 { font-size: 30px; margin: 0; letter-spacing: -0.6px; }
+    .title p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
 
-    h2 { font-size: 16px; margin: 14px 0 10px 0; letter-spacing: -0.2px; }
+    h2 { font-size: 22px; margin: 20px 0 14px 0; letter-spacing: -0.3px; }
 
     .message {
       display: none;
-      border-radius: 14px;
-      padding: 12px 12px;
+      border-radius: 12px;
+      padding: 14px 14px;
       margin: 0 0 12px 0;
-      font-size: 13px;
+      font-size: 15px;
       line-height: 1.45;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      background: #fafbfc;
     }
     .message.error {
       display: block;
-      border-color: rgba(255, 69, 58, 0.40);
-      background: rgba(255, 69, 58, 0.10);
-      color: rgba(255, 255, 255, 0.92);
+      border-color: #fecdca;
+      background: #fff6f5;
+      color: var(--danger);
     }
     .message.success {
       display: block;
-      border-color: rgba(50, 215, 75, 0.35);
-      background: rgba(50, 215, 75, 0.10);
-      color: rgba(255, 255, 255, 0.92);
+      border-color: #abefc6;
+      background: #f0fdf4;
+      color: var(--ok);
     }
 
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     @media (max-width: 540px) { .grid { grid-template-columns: 1fr; } }
 
     .field { display: flex; flex-direction: column; gap: 7px; }
-    label { font-size: 12px; color: var(--muted); letter-spacing: 0.2px; }
+    label { font-size: 14px; color: var(--muted); letter-spacing: 0.1px; }
     input {
-      height: 42px;
-      padding: 0 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(0,0,0,0.18);
-      color: rgba(255,255,255,0.92);
+      height: 50px;
+      padding: 0 14px;
+      border-radius: 14px;
+      border: 1px solid #d5dae1;
+      background: #ffffff;
+      color: var(--text);
       outline: none;
-      font-size: 14px;
+      font-size: 16px;
       transition: border-color 160ms ease, box-shadow 160ms ease;
     }
-    input::placeholder { color: rgba(255,255,255,0.35); }
+    input::placeholder { color: #98a2b3; }
     input:focus {
-      border-color: rgba(10, 132, 255, 0.55);
-      box-shadow: 0 0 0 6px rgba(10, 132, 255, 0.12);
+      border-color: #111418;
+      box-shadow: 0 0 0 5px rgba(17, 20, 24, 0.08);
     }
-    .hint { margin: 0; color: var(--muted2); font-size: 12px; line-height: 1.55; }
+    .hint { margin: 0; color: var(--muted2); font-size: 14px; line-height: 1.6; }
 
-    .actions { margin-top: 12px; display: flex; gap: 10px; align-items: center; }
+    .actions { margin-top: 16px; display: flex; gap: 10px; align-items: center; }
     .primary {
       width: 100%;
-      height: 44px;
+      height: 52px;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: linear-gradient(135deg, rgba(10,132,255,0.95), rgba(100,210,255,0.60));
-      color: rgba(255,255,255,0.96);
+      border: 1px solid #111418;
+      background: #111418;
+      color: #ffffff;
       font-weight: 700;
-      letter-spacing: 0.2px;
+      font-size: 16px;
+      letter-spacing: 0.1px;
       cursor: pointer;
       transition: transform 120ms ease, filter 120ms ease;
     }
@@ -150,37 +143,37 @@ const registerPageHTML = `<!DOCTYPE html>
     .sideCard { display: flex; flex-direction: column; gap: 12px; }
     .kv {
       border-radius: var(--radius2);
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.05);
-      padding: 14px;
-      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      background: #fafbfc;
+      padding: 18px;
+      margin-bottom: 14px;
     }
-    .kv h3 { margin: 0 0 8px 0; font-size: 13px; color: rgba(255,255,255,0.86); }
-    .kv p { margin: 0; font-size: 12px; line-height: 1.55; color: var(--muted); }
+    .kv h3 { margin: 0 0 10px 0; font-size: 17px; color: #1d2939; }
+    .kv p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--muted); }
 
     .server {
       margin-top: 10px;
       font-family: var(--mono);
-      font-size: 12px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.12);
+      font-size: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1px solid #d5dae1;
       word-break: break-all;
-      color: rgba(255,255,255,0.90);
+      color: #111418;
     }
-    a { color: rgba(100, 210, 255, 0.92); text-decoration: none; }
+    a { color: #175cd3; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .footer {
-      margin-top: 18px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255,255,255,0.10);
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
-      font-size: 12px;
-      color: rgba(255,255,255,0.55);
+      font-size: 14px;
+      color: var(--muted2);
     }
     .muted { color: var(--muted); }
   </style>
@@ -196,11 +189,10 @@ const registerPageHTML = `<!DOCTYPE html>
         </div>
       </div>
 
-      <div class="muted" id="t_intro" style="font-size: 13px; line-height: 1.7;">
+      <div class="muted" id="t_intro" style="font-size: 16px; line-height: 1.7;">
         Create your first account to finish setup. Then use any official Bitwarden client to sign in.
       </div>
 
-      <div style="height: 14px"></div>
       <h2 id="t_setup">Setup</h2>
 
       <div id="message" class="message"></div>
